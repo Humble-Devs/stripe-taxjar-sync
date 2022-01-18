@@ -1,0 +1,10 @@
+certifi==2021.10.8
+charset-normalizer==2.0.10
+idna==3.3
+jsonobject==0.9.10
+pytz==2021.3
+requests==2.27.1
+six==1.16.0
+stripe==2.64.0
+taxjar==2.0.0
+urllib3==1.26.8
