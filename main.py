@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 logger = logging.getLogger("logger")
+logging.basicConfig(level=logging.INFO)
+
 stripe.api_key = os.getenv("STRIPE_API_KEY")
 taxjar_client = taxjar.Client(api_key=os.getenv("TAXJAR_API_KEY"))
 REQUEST_LIMIT = 100
@@ -106,7 +108,7 @@ def create_taxjar_transaction(transaction, transaction_type):
 
 
 def main():
-    logger.debug(f"\nRetrieving all Charges ...")
+    logger.info(f" Retrieving all Charges ...\n")
     # Retrieve All Charges from Stripe API
     all_charges = []
     has_more_charges = True
@@ -126,7 +128,7 @@ def main():
         # Check if there's more charges to retrieve
         has_more_charges = charges["has_more"]
 
-    logger.debug(f"\nRetrieving all Refunds ...")
+    logger.info(f" Retrieving all Refunds ...\n")
     # Retrieve All Refunds from Stripe API
     all_refunds = []
     has_more_refunds = True
@@ -143,12 +145,11 @@ def main():
         # Check if there's more charges to retrieve
         has_more_refunds = refunds["has_more"]
 
-    logger.debug(f"\n\nNumber of all Charges: {len(all_charges)}")
-    logger.debug(f"Number of all Refunds: {len(all_refunds)}\n\n")
+    logger.info(f"\n\nNumber of all Charges: {len(all_charges)}\nNumber of all Refunds: {len(all_refunds)}\n")
 
     # Turn Stripe Charges into TaxJar Order Transactions
     for idx, charge in enumerate(all_charges):
-        logger.debug(f"Processing [{idx + 1}/{len(all_charges)}] Order")
+        logger.info(f" Processing [{idx + 1}/{len(all_charges)}] Order")
         # Create a TaxJar Transaction if Charge was successfully paid
         if charge["paid"]:
             order_obj = get_order_obj(charge)
@@ -163,12 +164,11 @@ def main():
                 order_transaction = create_taxjar_transaction(order_obj, "order")
 
                 if order_transaction:
-                    logger.debug(f"Order Amount: {order_transaction.amount}")
-                    logger.debug(f"Order Tax to Collect: {order_transaction.sales_tax}")
+                    logger.info(f" Order Amount: {order_transaction.amount}\nOrder Tax to Collect: {order_transaction.sales_tax}\n")
 
     # Turn Stripe Refunds into TaxJar Refund Transactions
     for idx, refund in enumerate(all_refunds):
-        logger.debug(f"Processing [{idx + 1}/{len(all_refunds)}] Refund")
+        logger.info(f" Processing [{idx + 1}/{len(all_refunds)}] Refund")
         # Create a TaxJar Transaction if Refund was successful
         if refund["status"] == "succeeded":
             refund_obj = get_refund_obj(refund)
@@ -183,8 +183,7 @@ def main():
                 refund_transaction = create_taxjar_transaction(refund_obj, "refund")
 
                 if refund_transaction:
-                    logger.debug(f"Refund Amount: {refund_transaction.amount}")
-                    logger.debug(f"Refund Tax to Collect: {refund_transaction.sales_tax}")
+                    logger.info(f" Refund Amount: {refund_transaction.amount}\nRefund Tax to Collect: {refund_transaction.sales_tax}\n")
 
 
 if __name__ == "__main__":
