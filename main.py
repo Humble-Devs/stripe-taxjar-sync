@@ -110,12 +110,18 @@ def main():
     # Retrieve All Charges from Stripe API
     all_charges = []
     has_more_charges = True
+    orders_starting_after = None
+    refunds_starting_after = None
+
     while has_more_charges:
         # Retrieve Charges from Stripe API
-        charges = stripe.Charge.list(limit=REQUEST_LIMIT)
+        charges = stripe.Charge.list(limit=REQUEST_LIMIT, starting_after=orders_starting_after)
 
         # Append charges to the list of all Charges
         all_charges += charges["data"]
+
+        # Retrieve the last retrieved Charge
+        orders_starting_after = all_charges[-1]["id"]
 
         # Check if there's more charges to retrieve
         has_more_charges = charges["has_more"]
@@ -126,10 +132,13 @@ def main():
     has_more_refunds = True
     while has_more_refunds:
         # Retrieve Charges from Stripe API
-        refunds = stripe.Refund.list(limit=REQUEST_LIMIT)
+        refunds = stripe.Refund.list(limit=REQUEST_LIMIT, starting_after=refunds_starting_after)
 
         # Append refunds to the list of all Refunds
         all_refunds += refunds["data"]
+
+        # Retrieve the last retrieved Refund
+        refunds_starting_after = all_refunds[-1]["id"]
 
         # Check if there's more charges to retrieve
         has_more_refunds = refunds["has_more"]
