@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 logger = logging.getLogger("logger")
-stripe.api_key = os.getenv('STRIPE_API_KEY')
-taxjar_client = taxjar.Client(api_key=os.getenv('TAXJAR_API_KEY'))
+stripe.api_key = os.getenv("STRIPE_API_KEY")
+taxjar_client = taxjar.Client(api_key=os.getenv("TAXJAR_API_KEY"))
 REQUEST_LIMIT = 100
 FROM_ADDRESS = {
     "ZIP": os.getenv("FROM_ZIP"),
@@ -33,20 +33,20 @@ def get_order_obj(data):
     :return: Dictionary representing a TaxJar Transaction object
     """
     return {
-        'transaction_id': data["id"],
-        'transaction_date': convert_timestamp_to_datetime_utc(data["created"]),
-        'from_country': SMARTER_SORTING_ADDRESS["COUNTRY"],
-        'from_zip': SMARTER_SORTING_ADDRESS["ZIP"],
-        'from_state': SMARTER_SORTING_ADDRESS["STATE"],
-        'from_city': SMARTER_SORTING_ADDRESS["CITY"],
-        'from_street': SMARTER_SORTING_ADDRESS["STREET"],
-        'to_country': data["billing_details"]["address"]["country"],
-        'to_zip': data["billing_details"]["address"]["postal_code"],
-        'to_state': data["billing_details"]["address"]["state"],
-        'to_city': data["billing_details"]["address"]["city"],
-        'to_street': data["billing_details"]["address"]["line1"],
-        'amount': data["amount"] / 100,
-        'shipping': 0  # Digital Products don't have shipping costs
+        "transaction_id": data["id"],
+        "transaction_date": convert_timestamp_to_datetime_utc(data["created"]),
+        "from_country": FROM_ADDRESS["COUNTRY"],
+        "from_zip": FROM_ADDRESS["ZIP"],
+        "from_state": FROM_ADDRESS["STATE"],
+        "from_city": FROM_ADDRESS["CITY"],
+        "from_street": FROM_ADDRESS["STREET"],
+        "to_country": data["billing_details"]["address"]["country"],
+        "to_zip": data["billing_details"]["address"]["postal_code"],
+        "to_state": data["billing_details"]["address"]["state"],
+        "to_city": data["billing_details"]["address"]["city"],
+        "to_street": data["billing_details"]["address"]["line1"],
+        "amount": data["amount"] / 100,
+        "shipping": 0  # Digital Products don't have shipping costs
     }
 
 
@@ -61,21 +61,21 @@ def get_refund_obj(data):
     corresponding_charge = stripe.Charge.retrieve(data["charge"])
 
     return {
-        'transaction_id': data["id"],
-        'transaction_reference_id': corresponding_charge["id"],
-        'transaction_date': convert_timestamp_to_datetime_utc(data["created"]),
-        'from_country': SMARTER_SORTING_ADDRESS["COUNTRY"],
-        'from_zip': SMARTER_SORTING_ADDRESS["ZIP"],
-        'from_state': SMARTER_SORTING_ADDRESS["STATE"],
-        'from_city': SMARTER_SORTING_ADDRESS["CITY"],
-        'from_street': SMARTER_SORTING_ADDRESS["STREET"],
-        'to_country': corresponding_charge["billing_details"]["address"]["country"],
-        'to_zip': corresponding_charge["billing_details"]["address"]["postal_code"],
-        'to_state': corresponding_charge["billing_details"]["address"]["state"],
-        'to_city': corresponding_charge["billing_details"]["address"]["city"],
-        'to_street': corresponding_charge["billing_details"]["address"]["line1"],
-        'amount': -(data["amount"] / 100),
-        'shipping': 0  # Digital Products don't have shipping costs
+        "transaction_id": data["id"],
+        "transaction_reference_id": corresponding_charge["id"],
+        "transaction_date": convert_timestamp_to_datetime_utc(data["created"]),
+        "from_country": FROM_ADDRESS["COUNTRY"],
+        "from_zip": FROM_ADDRESS["ZIP"],
+        "from_state": FROM_ADDRESS["STATE"],
+        "from_city": FROM_ADDRESS["CITY"],
+        "from_street": FROM_ADDRESS["STREET"],
+        "to_country": corresponding_charge["billing_details"]["address"]["country"],
+        "to_zip": corresponding_charge["billing_details"]["address"]["postal_code"],
+        "to_state": corresponding_charge["billing_details"]["address"]["state"],
+        "to_city": corresponding_charge["billing_details"]["address"]["city"],
+        "to_street": corresponding_charge["billing_details"]["address"]["line1"],
+        "amount": -(data["amount"] / 100),
+        "shipping": 0  # Digital Products don't have shipping costs
     }
 
 
@@ -178,5 +178,5 @@ def main():
                     logger.debug(f"Refund Tax to Collect: {refund_transaction.sales_tax}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
