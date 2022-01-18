@@ -1,13 +1,16 @@
 import logging
-from datetime import datetime
-
+import os
 import pytz
 import stripe
 import taxjar
+from datetime import datetime
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logger = logging.getLogger("logger")
-stripe.api_key = "sk_test_yHY7cvy5KiEhF0QbZ7bZC44w00PQhs2Qgp"
-taxjar_client = taxjar.Client(api_key="3397f5e97612850d05ee7d15b2361548")
+stripe.api_key = os.getenv('STRIPE_API_KEY')
+taxjar_client = taxjar.Client(api_key=os.getenv('TAXJAR_API_KEY'))
 REQUEST_LIMIT = 100
 SMARTER_SORTING_ADDRESS = {
     "ZIP": "78702",
