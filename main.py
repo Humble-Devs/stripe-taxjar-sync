@@ -47,7 +47,7 @@ def get_order_obj(data):
         "to_state": data["billing_details"]["address"]["state"],
         "to_city": data["billing_details"]["address"]["city"],
         "to_street": data["billing_details"]["address"]["line1"],
-        "amount": data["amount"] / 100,
+        "amount": data["amount"] / 100,  # Amounts are represented in smallest currency unit, i.e. cents
         "shipping": 0  # Digital Products don't have shipping costs
     }
 
@@ -76,7 +76,7 @@ def get_refund_obj(data):
         "to_state": corresponding_charge["billing_details"]["address"]["state"],
         "to_city": corresponding_charge["billing_details"]["address"]["city"],
         "to_street": corresponding_charge["billing_details"]["address"]["line1"],
-        "amount": -(data["amount"] / 100),
+        "amount": -(data["amount"] / 100),  # Amounts are represented in smallest currency unit, i.e. cents
         "shipping": 0  # Digital Products don't have shipping costs
     }
 
