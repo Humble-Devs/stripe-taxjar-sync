@@ -12,12 +12,12 @@ logger = logging.getLogger("logger")
 stripe.api_key = os.getenv('STRIPE_API_KEY')
 taxjar_client = taxjar.Client(api_key=os.getenv('TAXJAR_API_KEY'))
 REQUEST_LIMIT = 100
-SMARTER_SORTING_ADDRESS = {
-    "ZIP": "78702",
-    "COUNTRY": "US",
-    "STATE": "TX",
-    "CITY": "Austin",
-    "STREET": "4901 E Cesar Chavez St",
+FROM_ADDRESS = {
+    "ZIP": os.getenv("FROM_ZIP"),
+    "COUNTRY": os.getenv("FROM_COUNTRY"),
+    "STATE": os.getenv("FROM_STATE"),
+    "CITY": os.getenv("FROM_CITY"),
+    "STREET": os.getenv("FROM_STREET")
 }
 
 
