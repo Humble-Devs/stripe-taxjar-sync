@@ -4,7 +4,7 @@ import os
 import stripe
 from dotenv import load_dotenv
 
-from constants import convert_timestamp_to_datetime_utc, create_taxjar_transaction, get_customer_address
+from .constants import convert_timestamp_to_datetime_utc, create_taxjar_transaction, get_customer_address
 
 load_dotenv()
 

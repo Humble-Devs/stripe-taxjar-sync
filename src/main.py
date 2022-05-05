@@ -1,5 +1,5 @@
-from orders import sync_orders
-from refunds import sync_refunds
+from .orders import sync_orders
+from .refunds import sync_refunds
 
 
 def main():
